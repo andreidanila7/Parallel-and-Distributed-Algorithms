@@ -17,12 +17,27 @@ int main(int argc, char** argv0)
 	int name_length;
 	MPI_Get_processor_name(processor_name, name_length);
 
-	int n, i, v[];
+	int n, i, v[], x, sum=0, k;
 
-	cin >> n;
-	for (i=1, i<=n, i++)
-		cin >> v[i];
+	if (rank == 0)
+	{
+		cin >> n;
+		for (i = 1, i <= n, i++)
+			cin >> v[i];
 
+		x = n / ? ;   // arrays length/ number of processes
+		for (k = 0; k <= x; k++)
+			s = s + v[k];
+
+		s = s +  //receive suma
+
+	else
+		for (k = nr_proc * x; k <= (nr_proc + 1)*x; k++)
+			sum = sum + v[k];
+		//send sum	
+	}
+
+		
 
 
 
