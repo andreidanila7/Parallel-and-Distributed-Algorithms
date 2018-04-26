@@ -29,12 +29,12 @@ int main(int argc, char** argv0)
 		for (k = 0; k <= x; k++)
 			s = s + v[k];
 
-		s = s +  //receive suma
+		s = s +  MPI_Recv(v, N / nr_proc, MPI_INT, 0, 1, MPI_COMM_WORLD, &status);
 
 	else
 		for (k = nr_proc * x; k <= (nr_proc + 1)*x; k++)
 			sum = sum + v[k];
-		//send sum	
+		MPI_Send(&sum, 1, MPI_INT, 0, 1, MPI_COMM_WORLD)
 	}
 
 		
