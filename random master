@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <cstdlib.h> 
+#include <mpi.h>
+
+
+
+using namespace std;
+
+
+
+int main(int argc, char** argv0)
+
+{
+
+	MPI_Init(NULL, NULL);
+
+
+
+	int nr_proc;
+
+	MPI_Comm_size(MPI_COMM_WORLD, &nr_proc);
+
+
+
+	int rank;
+
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+
+
+	char processor_name[MPI_MAX_PROCESSOR_NAME];
+
+	int name_length;
+
+	MPI_Get_processor_name(processor_name, name_length);
+
+	int max, idmax, r, i;
+	
+	
+
+	if (rank == 0)
+	{
+		max = rand();
+		idmax = 0;
+
+		MPI_Recv(r, 1, MPI_INT, 0, i, MPI_COMM_WORLD);
+
+		if (r > max)
+		{
+			max = r;
+			idmax = i;
+		}
+
+		if (r == max)
+			if (i > idmax)
+				idmax = i;
+
+
+	}
+	else
+	{
+			r = rand();
+			int MPI_Comm_rank (MPI_Comm comm, int *i)
+			MPI_Send(&r, 1, MPI_INT, 0, i, MPI_COMM_WORLD);
+	}
+
+	cout << "The process" << maxid << " is now master";
