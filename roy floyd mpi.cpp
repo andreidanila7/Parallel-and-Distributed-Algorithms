@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 	MPI_Init(&argc, &argv);
 	int rank;
 	int INF = 9999;
-	int n = 5, k, i, j,q;
+	int n = 5, k, i, j;
 	
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
@@ -34,7 +34,6 @@ int main(int argc, char* argv[])
 		for (j = 0; j < n; j++) 
 			a[rank][j] = min(a[rank][j], a[rank][k]) + a[k][j]);
 		
-	int MPI_Comm_rank (MPI_Comm comm, int *q)
 	MPI_Send(&a, 25, MPI_INT, 0, q, MPI_COMM_WORLD);
 
 
