@@ -26,7 +26,7 @@ int main()
 	int INFINIT = 9999;
 	int n = 5;
 
-	size_t size = n * n * sizeof(float); // aloc vect de intrare in mem
+	size_t size = n * n * sizeof(float); 
 
 
 
@@ -38,14 +38,12 @@ int main()
 
 
 
-	int* d_a; // aloc vect in memorie int
+	int* d_a; 
 
 	cudaMalloc(&d_a, size);
 
-	cudaMemcpy(d_a, h_a, size, cudaMemcpyHostToDevice); // copy din mem in memorie dev
-
-
-
+	cudaMemcpy(d_a, h_a, size, cudaMemcpyHostToDevice); 
+	
 	int numBlocks = 1;
 
 	dim3 threadsPerBlock(n*n);
