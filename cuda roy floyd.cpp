@@ -1,47 +1,71 @@
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 #include <iostream>
-#define N 4
-#define graph(row,col) graph[row*N+col]
-const int inf = 999;
+#include "stdafx.h"
 
-int A[N*N] = { 0, 3,6,15,inf,0,-2,inf,inf,inf,0,2,1,inf,inf,0 }; 
-void printGraph(int graph[]) {
-	for (int i = 0; i < N; ++i) {
-		for (int j = 0; j < N; ++j)
-		{
-			if (graph(i, j) == inf)
-				std::cout << "inf ,";
-			else
-				std::cout << graph(i, j) << ", ";
-		}
-		std::cout << std::endl;
-	}
-}
-
-__global__ void RoyFloyd(int *graph, int k)
+__device__ int min(int a, int b)
 {
-	int i = threadIdx.x;
-	for (int j = 0; j < N; ++j)
-	{
-		if (A(i, k) +A(k, j) < A(i, j))
-			Ai, j) = A(i, k) + A(k, j))
-	}
+		if (a > b)
+		return a;
+	else
+		return b;
 }
+
+__global__ void RoyFloyd(int a[n][n], int k) 
+	{
+	
+	int i = threadIdx.x;
+	int j = threadIdx.y;
+	
+	a[i][j] = min(a[i][j], a[i][k] + a[k][j]);
+
+	}
 
 int main()
 {
-	int* d_roy;
-	cudaMalloc(&d_roy, N*N * sizeof(int));
-	for (int k = 0; k < N; ++k)
-	{
-		cudaMemcpy(d_roy, graph, N * N * sizeof(int), cudaMemcpyHostToDevice);
-		int* d_k;
-		cudaMalloc(&d_k, sizeof(int));
-		cudaMemcpy(d_k, &k, sizeof(int), cudaMemcpyHostToDevice);
-		RoyFloyd << <1, N > >> (d_roy, d_k);
-		cudaMemcpy(graph, d_roy, N * N * sizeof(int), cudaMemcpyDeviceToHost);
-	}
-	printGraph(graph);
+	int INFINIT = 9999;
+	int n = 5;
+
+	size_t size = n * n * sizeof(float); // aloc vect de intrare in mem
+
+
+
+	int h_a[n][n] = { { 0, 2, INFINIT, 2, INFINIT },
+					{  2, 0, 3, INFINIT, INFINIT },
+					{ INFINIT, 3, 0, 1, 8 },
+					{ 10, INFINIT, 1, 0, INFINIT },
+					{ INFINIT, INFINIT, 8, INFINIT, 0 } }; 
+
+
+
+	int* d_a; // aloc vect in memorie int
+
+	cudaMalloc(&d_a, size);
+
+	cudaMemcpy(d_a, h_a, size, cudaMemcpyHostToDevice); // copy din mem in memorie dev
+
+
+
+	int numBlocks = 1;
+
+	dim3 threadsPerBlock(n*n);
+
+
+
+	for (int k = 0; k < n; k++) 
+		RoyFloyd << <numBlocks, threadsPerBlock >> >(d_a, k);
+
+
+	cudaMemcpy(h_a, d_a, size, cudaMemcpyDeviceToHost);
+	
+	for (x = 0; x < n; x++) {
+
+		for (y = 0; y < n; y++)
+			printf("%d     ", h_a[x][y]);
+
+		printf("\n");
+		}
+	cudaFree(d_a);
+	free(h_a);
 	return 0;
 	}
